@@ -1,84 +1,103 @@
-# Typing Speed Test Game
+# CI/CD Pipeline Project
 
 ## Introduction
+Welcome to our CI/CD Pipeline Project! This project is the portfolio project for ALX graduation, showcasing our skills in DevOps practices and tools. Our team, consisting of Adham Khaled and Gerges Zechariah, has implemented a comprehensive CI/CD pipeline using GitHub, Jenkins, and Docker on a sample application.
 
-Welcome to the Typing Speed Test Game! This project transforms the practice of typing into an engaging and fun game, aiming to help users improve their typing speed and accuracy. Whether you're a beginner just starting out or an advanced typist looking for a challenge, this game has something for everyone.
+## Project Overview
+This DevOps project demonstrates the implementation of a Continuous Integration and Continuous Deployment (CI/CD) pipeline. We've utilized a sample application previously developed by Gerges Zechariah as the basis for our pipeline setup.
 
-- **[Project Demo Video](#)**: [https://youtu.be/r00dhz494ac]
-- **[Project Blog Article](#)**: [https://www.linkedin.com/posts/gerges-zechariah_alx-activity-7216937002976346112-3vuF?utm_source=share&utm_medium=member_desktop]
-- **Author's LinkedIn**: [Gerges-Creative](#)
+### Key Components:
+- **Version Control**: GitHub
+- **Continuous Integration**: Jenkins
+- **Containerization**: Docker
+- **Deployment**: Two Digital Ocean servers
 
-## Inspiration and Story
+## Sample Application: Typing Speed Test Game
+The sample application used in this project is a Typing Speed Test Game. Below is an overview of the original application:
+- Multiple difficulty levels: Easy, Normal, and Hard
+- Immediate word check functionality
+- Dynamic score display
+- Adjustable timer based on difficulty
 
-When I first learned about programming and started practicing it, I realized my slow typing speed was a significant obstacle. I spent more time finding the keys than actually coding. I wondered if there was a way to improve my typing speed and if the fast typists I saw in movies were real or just cinematic effects. My search led me to several websites dedicated to teaching touch typing, and I was particularly impressed by TypingClub. It took me from knowing nothing about typing to achieving 45 WPM in about two months.
+## CI/CD Pipeline Implementation
+Our CI/CD pipeline automates the process of building, testing, and deploying the Typing Speed Test Game application. Here's a high-level overview of our pipeline:
+1. **Code Repository**: GitHub hosts our application code and pipeline configuration.
+2. **Continuous Integration**: Jenkins is set up to automatically trigger builds on code commits.
+3. **Containerization**: Docker is used to create consistent, isolated environments for our application.
+4. **Deployment**: The pipeline automatically deploys the containerized application to two Digital Ocean servers, ensuring redundancy and high availability.
 
-Inspired by my experience, I wanted to create a fun and educational typing game. I love video games, so I thought turning typing practice into a game would make the learning process more enjoyable. This project is the result of that inspiration.
+## Detailed Jenkins Configuration Guide
 
-## Technical Overview
+### Prerequisites
+- A Linux server for Jenkins (Ubuntu recommended)
+- A separate deploy server
+- Sudo privileges on both servers
 
-### Technologies Used
+### SSH Key Configuration
 
-For this project, I chose to use HTML5, CSS3, and JavaScript without any additional frameworks. I made this decision to solidify my understanding of these core web technologies and to challenge myself to build a fully functional game from scratch.
+#### On the Deploy Server:
+1. Generate and configure SSH keys:
+```bash
+cd /root
+ssh-keygen -t rsa -b 4096 -C "jenkins@example.com"
+cd /root/.ssh
+cat id_rsa.pub >> authorized_keys
+chmod 600 authorized_keys
+```
 
-### Features
+2. Copy the private key content (you'll need this for Jenkins):
+```bash
+cat id_rsa
+```
 
-- **Difficulty Levels**: The game includes three difficulty levels: Easy, Normal, and Hard, each with its own time limit and word list.
-- **Immediate Word Check**: Pressing the Enter key checks the word immediately, even before the timer runs out.
-- **Score Display**: A section displays your current and last scores, and a description explains how the game works.
-- **Time Management**: The timer dynamically adjusts based on the selected difficulty level.
+#### On the Jenkins Server:
+1. Install Required Plugin:
+   - Navigate to "Manage Jenkins" > "Manage Plugins"
+   - Install "SSH Plugin"
+   - Restart Jenkins if prompted
 
-### Technical Challenges and Solutions
+2. Configure SSH Credentials:
+   - Go to "Manage Jenkins" > "Manage Credentials"
+   - Add new SSH credentials under "System" > "Global credentials"
+   - Choose "SSH Username with private key"
+   - Paste the previously copied private key
+   - Provide appropriate ID and description
 
-#### Immediate Word Check
+3. Test SSH Connection:
+   - Navigate to "Manage Jenkins" > "Configure System"
+   - Add and verify SSH remote host configuration
+   - Use "Check connection" to ensure proper setup
 
-One of the most challenging features was implementing the immediate word check with the Enter key. Initially, the logic for checking the word was part of a larger function responsible for starting the game. This made it difficult to add the Enter key functionality without cluttering the code.
+### Security Best Practices
+1. Always use key-based authentication
+2. Implement regular key rotation
+3. Use bastion hosts or VPN for production access
+4. Configure proper firewall rules
+5. Utilize SSH config files for connection management
 
-To solve this, I refactored my code by breaking it into smaller functions, each with a specific responsibility. I created a separate function for checking the word, which resolved the issue. However, this introduced a new problem: multiple 'Game Over' messages would appear if the Enter key was pressed repeatedly after the game ended.
+### Troubleshooting Guide
+If you encounter issues, verify:
+```bash
+# Correct SSH permissions
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/id_rsa
+chmod 644 ~/.ssh/id_rsa.pub
 
-To fix this, I implemented a flag that prevents the function from executing once the game is over. This approach ensured that the word check function only runs when necessary, improving both functionality and user experience.
+# SSH service status
+service ssh status
 
-## Installation
+# Firewall configuration
+ufw status
+```
 
-To run this project locally, follow these steps:
+## Team Members
+- **Adham Khaled**: [https://www.linkedin.com/in/adham-khaalid](#)
+- **Gerges Zechariah**: [https://www.linkedin.com/in/gerges-zechariah](#)
 
-1. **Clone the Repository**:
-    ```bash
-    git clone https://github.com/your-username/typing-speed-test-game.git
-    cd typing-speed-test-game
-    ```
+## Project Playbook
+- **Google Slides**: [https://docs.google.com/presentation/d/1tP15kc1J0kRrlpQmgYDdexQEY_47xDZGt0MCNuYH8iw/edit?usp=sharing](#)
 
-2. **Open the Project**:
-    Open the `index.html` file in your preferred browser.
-
-No additional dependencies or installations are required as this is a purely front-end project.
-
-## Usage
-
-1. **Select Difficulty**: Choose from three difficulty levels: Easy, Normal, or Hard.
-2. **Start the Game**: Click on the "Start Playing" button to begin.
-3. **Type the Words**: Type the words displayed on the screen within the given time limit.
-4. **Press Enter**: Hit the Enter key to check your word immediately.
-5. **View Scores**: Your current score and last score will be displayed at the end of each game.
-
-## Contributing
-
-Contributions are welcome! If you have any suggestions or improvements, feel free to create a pull request or open an issue.
-
-1. Fork the project.
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
-
-## Related Projects
-
-- [TypingClub](https://www.typingclub.com/): A great platform for learning and practicing typing.
-- [Monkeytype](https://monkeytype.com/): An online typing test that measures typing speed and accuracy.
-
-## Licensing
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## About the Author
-
-Hi, I’m Gerges Zechariah, a Software Engineer starting my journey in programming and technology through the great opportunity I had from ALX. I love reading and playing video games. I’m excited for what comes ahead and doing my best and hardest to be prepared for my career path in the future.
+## Acknowledgements
+- ALX Africa for providing the opportunity and guidance for this graduation project
+- Digital Ocean for hosting our deployment servers
+- The open-source communities behind GitHub, Jenkins, and Docker
